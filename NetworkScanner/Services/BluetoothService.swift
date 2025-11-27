@@ -33,7 +33,7 @@ final class BluetoothService: NSObject {
     // MARK: - Private Properties
     
     private var continuation: CheckedContinuation<[ScannedDevice], Error>?
-    private var centralManager: CBCentralManager!
+    private var centralManager: CBCentralManager?
     private var devices: [ScannedDevice] = []
     private var discoveredIDs = Set<UUID>()
     
@@ -65,6 +65,8 @@ private extension BluetoothService {
     }
     
     func retrieveConnectedDevices() {
+        guard let centralManager else { return }
+
         let services = [
             CBUUID(string: "1800"), // Generic Access
             CBUUID(string: "1801"), // Generic Attribute
@@ -78,7 +80,7 @@ private extension BluetoothService {
         ]
         
         let connectedPeripherals = centralManager.retrieveConnectedPeripherals(withServices: services)
-        
+
         for peripheral in connectedPeripherals {
             addDevice(peripheral, rssi: 0, isConnected: true)
         }
