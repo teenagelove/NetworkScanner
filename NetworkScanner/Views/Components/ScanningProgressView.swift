@@ -1,5 +1,5 @@
 //
-//  SccaningProgressView.swift
+//  ScanningProgressView.swift
 //  NetworkScanner
 //
 //  Created by Danil Kazakov on 2025/11/28.
@@ -8,11 +8,23 @@
 import SwiftUI
 
 struct ScanningProgressView: View {
+    let value: CGFloat
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(Color.secondary.opacity(0.2))
+
+                Capsule()
+                    .fill(Color.blue)
+                    .frame(width: min(CGFloat(value) * geometry.size.width, geometry.size.width))
+            }
+        }
     }
 }
 
+
 #Preview {
-    ScanningProgressView()
+    ScanningProgressView(value:0.5)
 }

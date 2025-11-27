@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct DeleteButton: View {
+    let action: (() -> Void)?
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button(role: .destructive) {
+            action?()
+        } label: {
+            Image(systemName: Constants.SFSymbols.trash)
+        }
     }
 }
 
 #Preview {
-    DeleteButton()
+    DeleteButton { }
 }
