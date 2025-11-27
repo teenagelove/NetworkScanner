@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		ACADE72B2ED803FB00BEA48B /* NetworkScanner.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ACADE7292ED803FA00BEA48B /* NetworkScanner.xcdatamodeld */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		ACADE7182ED7F30600BEA48B /* NetworkScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetworkScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACADE72A2ED803FA00BEA48B /* NetworkScanner.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NetworkScanner.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +50,7 @@
 		ACADE70F2ED7F30600BEA48B = {
 			isa = PBXGroup;
 			children = (
+				ACADE7292ED803FA00BEA48B /* NetworkScanner.xcdatamodeld */,
 				ACADE71A2ED7F30600BEA48B /* NetworkScanner */,
 				ACADE7192ED7F30600BEA48B /* Products */,
 			);
@@ -132,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ACADE72B2ED803FB00BEA48B /* NetworkScanner.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,6 +362,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		ACADE7292ED803FA00BEA48B /* NetworkScanner.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				ACADE72A2ED803FA00BEA48B /* NetworkScanner.xcdatamodel */,
+			);
+			currentVersion = ACADE72A2ED803FA00BEA48B /* NetworkScanner.xcdatamodel */;
+			path = NetworkScanner.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = ACADE7102ED7F30600BEA48B /* Project object */;
 }
