@@ -26,27 +26,4 @@ struct ScannedDevice: Identifiable, Hashable {
         case bluetooth = "Bluetooth"
         case lan = "LAN"
     }
-    
-    enum BluetoothConnectionStatus: String {
-        case disconnected = "Disconnected"
-        case connecting = "Connecting..."
-        case connected = "Connected"
-        
-        var displayText: String {
-            return self.rawValue
-        }
-        
-        init(from peripheralState: Int) {
-            switch peripheralState {
-            case 0: // CBPeripheralState.disconnected
-                self = .disconnected
-            case 1: // CBPeripheralState.connecting
-                self = .connecting
-            case 2: // CBPeripheralState.connected
-                self = .connected
-            default:
-                self = .disconnected
-            }
-        }
-    }
 }

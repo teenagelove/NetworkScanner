@@ -18,15 +18,15 @@ actor CoreDataService {
         persistentContainer = NSPersistentContainer(name: "NetworkScanner")
         persistentContainer.loadPersistentStores { _, error in
             if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                print("Unresolved error \(error), \(error.userInfo)")
             }
         }
         persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
     }
     
-    func saveSession(devices: [ScannedDevice]) async {
+    func saveSession(devices: [ScannedDevice]) async throws {
         let context = persistentContainer.newBackgroundContext()
-        await context.perform {
+        try await context.perform {
             let session = ScanSession(context: context)
             session.id = UUID()
             session.date = Date()
@@ -36,18 +36,14 @@ actor CoreDataService {
             }
             
             if context.hasChanges {
-                do {
-                    try context.save()
-                } catch {
-                    print("Error saving session: \(error)")
-                }
+                try context.save()
             }
         }
     }
     
-    func fetchSessions(dateFilter: Date? = nil) async -> [ScanSessionModel] {
+    func fetchSessions(dateFilter: Date? = nil) async throws -> [ScanSessionModel] {
         let context = persistentContainer.newBackgroundContext()
-        return await context.perform {
+        return try await context.perform {
             let request: NSFetchRequest<ScanSession> = ScanSession.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(keyPath: \ScanSession.date, ascending: false)]
             
@@ -62,19 +58,14 @@ actor CoreDataService {
                 }
             }
             
-            do {
-                let sessions = try context.fetch(request)
-                return sessions.map { $0.mapToModel() }
-            } catch {
-                print("Error fetching sessions: \(error)")
-                return []
-            }
+            let sessions = try context.fetch(request)
+            return sessions.map { $0.mapToModel() }
         }
     }
     
-    func fetchDevices(forSessionId sessionId: UUID, nameFilter: String? = nil) async -> [ScannedDevice] {
+    func fetchDevices(forSessionId sessionId: UUID, nameFilter: String? = nil) async throws -> [ScannedDevice] {
         let context = persistentContainer.newBackgroundContext()
-        return await context.perform {
+        return try await context.perform {
             let request: NSFetchRequest<Device> = Device.fetchRequest()
             
             var predicates: [NSPredicate] = [
@@ -88,30 +79,21 @@ actor CoreDataService {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
             request.sortDescriptors = [NSSortDescriptor(keyPath: \Device.name, ascending: true)]
             
-            do {
-                let devices = try context.fetch(request)
-                return devices.map { $0.mapToScannedDevice() }
-            } catch {
-                print("Error fetching devices: \(error)")
-                return []
-            }
+            let devices = try context.fetch(request)
+            return devices.map { $0.mapToScannedDevice() }
         }
     }
     
-    func deleteSession(withId id: UUID) async {
+    func deleteSession(withId id: UUID) async throws {
         let context = persistentContainer.newBackgroundContext()
-        await context.perform {
+        try await context.perform {
             let request: NSFetchRequest<ScanSession> = ScanSession.fetchRequest()
             request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
             
-            do {
-                let sessions = try context.fetch(request)
-                if let sessionToDelete = sessions.first {
-                    context.delete(sessionToDelete)
-                    try context.save()
-                }
-            } catch {
-                print("Error deleting session: \(error)")
+            let sessions = try context.fetch(request)
+            if let sessionToDelete = sessions.first {
+                context.delete(sessionToDelete)
+                try context.save()
             }
         }
     }

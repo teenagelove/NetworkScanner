@@ -22,8 +22,19 @@ struct SessionDetailView: View {
     // MARK: - Body
     
     var body: some View {
-        List(viewModel.devices) { device in
-            DeviceDetailRow(device: device)
+        Group {
+            switch viewModel.state {
+            case .idle, .loading:
+                ProgressView()
+            case .success(let devices):
+                List(devices) { device in
+                    DeviceDetailRow(device: device)
+                }
+            case .error(let message):
+                ErrorView(message: message) {
+                    viewModel.fetchDevices()
+                }
+            }
         }
         .navigationTitle(Constants.Titles.sessionDetails)
         .searchable(text: $viewModel.searchText, prompt: Constants.Placeholders.searchDeviceName)

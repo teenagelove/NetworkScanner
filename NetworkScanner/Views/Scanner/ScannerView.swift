@@ -8,21 +8,41 @@
 import SwiftUI
 
 struct ScannerView: View {
+    
     // MARK: - State
     
     @StateObject private var viewModel = ScannerViewModel()
     
+    // MARK: - Body
+    
     var body: some View {
         VStack {
             pickerView
-            
             contentView
         }
         .navigationTitle(Constants.Titles.networkScanner)
     }
 }
 
+// MARK: - Private Views
+
 private extension ScannerView {
+    @ViewBuilder
+    var contentView: some View {
+        switch viewModel.state {
+        case .idle:
+            emptyDevicesList
+        case .scanning:
+            scanningView
+        case .success(let devices):
+            devicesList(devices: devices)
+        case .error(let message):
+            ErrorView(message: message) {
+                viewModel.startScanning()
+            }
+        }
+    }
+    
     var pickerView: some View {
         Picker(Constants.Titles.scanType, selection: $viewModel.scanType) {
             ForEach(ScanType.allCases) { type in
@@ -34,20 +54,6 @@ private extension ScannerView {
         .disabled(isScanning)
     }
     
-    @ViewBuilder
-    var contentView: some View {
-        switch viewModel.state {
-        case .idle:
-            devicesList
-        case .scanning:
-            scanningView
-        case .error(let message):
-            ErrorView(message: message) {
-                viewModel.startScanning()
-            }
-        }
-    }
-    
     var scanningView: some View {
         VStack {
             ProgressView()
@@ -57,48 +63,58 @@ private extension ScannerView {
             Text(Constants.Labels.scanning)
                 .font(.headline)
             
-            ProgressView(value: viewModel.progress)
-                .padding()
+            ScanningProgressView(value: viewModel.progress)
+                .frame(height: 8)
+                .padding(.horizontal)
         }
         .frame(maxHeight: .infinity)
     }
     
-    var devicesList: some View {
+    func devicesList(devices: [ScannedDevice]) -> some View {
         ZStack {
-//            if viewModel.devices.isEmpty {
-//                emptyStateView
-//            } else {
-                List(viewModel.devices) { device in
+            if devices.isEmpty {
+                emptyStateView
+            } else {
+                List(devices) { device in
                     NavigationLink(destination: DeviceDetailView(device: device)) {
                         DeviceRow(device: device)
                     }
                 }
-                .padding(.bottom, 80)
-//            }
-
-            if case .error = viewModel.state {
-                EmptyView()
-            } else {
-                VStack {
-                    Spacer()
-
-                    actionButton
+                .safeAreaInset(edge: .bottom) {
+                    Color.clear.frame(height: 80)
                 }
+                .refreshable { viewModel.startScanning() }
+            }
+            
+            VStack {
+                Spacer()
+                actionButton
+            }
+        }
+    }
+    
+    var emptyDevicesList: some View {
+        ZStack {
+            emptyStateView
+            
+            VStack {
+                Spacer()
+                actionButton
             }
         }
     }
     
     var emptyStateView: some View {
         VStack(spacing: 16) {
-            Image(systemName: "antenna.radiowaves.left.and.right")
+            Image(systemName: Constants.SFSymbols.scannerTab)
                 .font(.system(size: 60))
                 .foregroundColor(.gray)
-
-            Text("No devices found yet")
+            
+            Text(Constants.Messages.noDevicesFound)
                 .font(.headline)
                 .foregroundColor(.gray)
-
-            Text("Tap 'Start Scanning' to search for nearby devices")
+            
+            Text(Constants.Messages.tapToStartScanning)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -120,14 +136,22 @@ private extension ScannerView {
         }
         .padding()
     }
-    
+}
+
+// MARK: - Computed Properties
+
+private extension ScannerView {
     var isScanning: Bool {
         if case .scanning = viewModel.state {
             return true
         }
         return false
     }
-    
+}
+
+// MARK: - Actions
+
+private extension ScannerView {
     func toggleScanning() {
         if isScanning {
             viewModel.stopScanning()
@@ -137,7 +161,8 @@ private extension ScannerView {
     }
 }
 
-#Preview() {
+// MARK: - Preview
+
+#Preview {
     ScannerView()
 }
-

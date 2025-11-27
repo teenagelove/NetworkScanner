@@ -16,15 +16,15 @@ struct HistoryView: View {
     // MARK: - Body
     
     var body: some View {
-        List(viewModel.sessions) { session in
-            NavigationLink(destination: SessionDetailView(session: session)) {
-                SessionRow(session: session)
-            }
-            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                Button(role: .destructive) {
-                    viewModel.deleteSession(session)
-                } label: {
-                    Label(Constants.Actions.delete, systemImage: Constants.SFSymbols.trash)
+        Group {
+            switch viewModel.state {
+            case .idle, .loading:
+                ProgressView()
+            case .success(let sessions):
+                sessionsList(sessions)
+            case .error(let message):
+                ErrorView(message: message) {
+                    viewModel.fetchSessions()
                 }
             }
         }
@@ -34,7 +34,7 @@ struct HistoryView: View {
                 filterView
             }
         }
-        .onAppear {
+        .task {
             viewModel.fetchSessions()
         }
     }
@@ -43,6 +43,17 @@ struct HistoryView: View {
 private extension HistoryView {
     
     // MARK: - View Components
+    
+    func sessionsList(_ sessions: [ScanSessionModel]) -> some View {
+        List(sessions) { session in
+            NavigationLink(destination: SessionDetailView(session: session)) {
+                SessionRow(session: session)
+            }
+            .swipeActions(edge: .trailing) {
+                DeleteButton {viewModel.deleteSession( session) }
+            }
+        }
+    }
     
     var filterView: some View {
         HStack {
@@ -59,7 +70,7 @@ private extension HistoryView {
                     viewModel.isDateFilterEnabled = false
                     viewModel.fetchSessions()
                 } label: {
-                    Image(systemName: "xmark.circle.fill")
+                    Image(systemName: Constants.SFSymbols.xmark)
                         .foregroundColor(.gray)
                 }
             }

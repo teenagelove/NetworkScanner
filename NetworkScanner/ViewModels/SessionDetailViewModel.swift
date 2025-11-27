@@ -9,11 +9,20 @@ import Combine
 import Foundation
 
 @MainActor
-class SessionDetailViewModel: ObservableObject {
+final class SessionDetailViewModel: ObservableObject {
+    
+    // MARK: - State
+    
+    enum State: Equatable {
+        case idle
+        case loading
+        case success([ScannedDevice])
+        case error(String)
+    }
     
     // MARK: - Published Properties
     
-    @Published var devices: [ScannedDevice]
+    @Published var state: State = .idle
     @Published var searchText = ""
     
     // MARK: - Private Properties
@@ -25,15 +34,21 @@ class SessionDetailViewModel: ObservableObject {
     
     init(session: ScanSessionModel) {
         self.sessionId = session.id
-        self.devices = session.devices
+        self.state = .success(session.devices)
         
         setupSearchSubscription()
     }
     
     func fetchDevices() {
+        state = .loading
+        
         Task {
-            let fetchedDevices = await CoreDataService.shared.fetchDevices(forSessionId: sessionId, nameFilter: searchText)
-            self.devices = fetchedDevices
+            do {
+                let devices = try await CoreDataService.shared.fetchDevices(forSessionId: sessionId, nameFilter: searchText)
+                state = .success(devices)
+            } catch {
+                state = .error(error.localizedDescription)
+            }
         }
     }
 }

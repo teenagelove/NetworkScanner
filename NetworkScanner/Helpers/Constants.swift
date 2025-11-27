@@ -8,6 +8,16 @@
 import Foundation
 
 enum Constants {
+    
+    // MARK: - Timing
+    
+    enum Timing {
+        static let scanDuration: TimeInterval = 15.0
+        static let progressUpdateInterval: UInt64 = 100_000_000 // 0.1 seconds in nanoseconds
+    }
+    
+    // MARK: - SF Symbols
+    
     enum SFSymbols {
         static let scannerTab = "antenna.radiowaves.left.and.right"
         static let historyTab = "clock.arrow.circlepath"
@@ -16,7 +26,10 @@ enum Constants {
         static let triangle = "exclamationmark.triangle"
         static let clockwise = "arrow.clockwise"
         static let trash = "trash"
+        static let xmark = "xmark"
     }
+    
+    // MARK: - Titles
     
     enum Titles {
         static let scanner = "Scanner"
@@ -27,6 +40,8 @@ enum Constants {
         static let scanComplete = "Scan Complete"
     }
     
+    // MARK: - Actions
+    
     enum Actions {
         static let delete = "Delete"
         static let ok = "OK"
@@ -35,10 +50,14 @@ enum Constants {
         static let repeatAction = "Repeat"
     }
     
+    // MARK: - Placeholders
+    
     enum Placeholders {
         static let searchDeviceName = "Search by device name"
         static let unknown = "Unknown"
     }
+    
+    // MARK: - Labels
     
     enum Labels {
         static let filterByDate = "Filter by Date"
@@ -58,6 +77,15 @@ enum Constants {
             "Found \(count) devices."
         }
     }
+    
+    // MARK: - Messages
+    
+    enum Messages {
+        static let noDevicesFound = "No devices found yet"
+        static let tapToStartScanning = "Tap 'Start Scanning' to search for nearby devices"
+    }
+    
+    // MARK: - Scan Types
     
     enum ScanTypes {
         static let bluetooth = "Bluetooth"

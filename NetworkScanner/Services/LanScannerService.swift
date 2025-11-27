@@ -5,63 +5,68 @@
 //  Created by Danil Kazakov on 2025/11/27.
 //
 
-import Combine
 import Foundation
 
-class LanScannerService: ObservableObject {
-    @Published var devices: [ScannedDevice] = []
-    @Published var isScanning = false
-    @Published var progress: Double = 0.0
+// MARK: - LAN Scanner Service
+
+final class LanScannerService {
     
-    private var timer: Timer?
+    // MARK: - Private Properties
     
-    // Placeholder for actual LanScan library integration
-    // Since we cannot fetch external dependencies without internet/user action,
-    // we simulate scanning for demonstration purposes.
+    private var devices: [ScannedDevice] = []
+    private var continuation: CheckedContinuation<[ScannedDevice], Never>?
     
-    func startScanning() {
-        guard !isScanning else { return }
-        isScanning = true
-        progress = 0.0
+    // MARK: - Public Methods
+    
+    /// Scans the local network for the specified duration
+    /// - Parameter duration: Scan duration in seconds
+    /// - Returns: Array of discovered devices
+    func scan(duration: TimeInterval = 15) async -> [ScannedDevice] {
         devices.removeAll()
         
-        // Simulate scanning process
-        var currentProgress = 0.0
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] timer in
-            guard let self = self else { return }
-            currentProgress += 0.01
-            self.progress = min(currentProgress, 1.0)
+        return await withCheckedContinuation { continuation in
+            self.continuation = continuation
             
-            if currentProgress >= 1.0 {
-                self.stopScanning()
-            }
-            
-            // Simulate finding devices
-            if Int(currentProgress * 100) % 20 == 0 && currentProgress < 0.9 {
-                self.addMockDevice()
+            Task {
+                await simulateScan(duration: duration)
+                self.stopAndReturn()
             }
         }
     }
-    
-    func stopScanning() {
-        isScanning = false
-        timer?.invalidate()
-        timer = nil
-        progress = 1.0
+}
+
+// MARK: - Private Methods
+
+private extension LanScannerService {
+    func simulateScan(duration: TimeInterval) async {
+        let totalSteps = Int(duration * 10)
+        
+        for step in 0..<totalSteps {
+            if step % 20 == 0 && step > 0 && step < totalSteps - 10 {
+                addMockDevice()
+            }
+            
+            try? await Task.sleep(nanoseconds: Constants.Timing.progressUpdateInterval)
+        }
     }
     
-    private func addMockDevice() {
-        let id = UUID()
+    func addMockDevice() {
         let device = ScannedDevice(
-            id: id,
+            id: UUID(),
             name: "LAN Device \(Int.random(in: 1...100))",
             ipAddress: "192.168.1.\(Int.random(in: 2...254))",
-            macAddress: "00:1A:2B:3C:4D:\(Int.random(in: 10...99))",
+            macAddress: "00:1A:2B:3C:4D:\(String(format: "%02X", Int.random(in: 10...99)))",
             rssi: 0,
             type: .lan,
             discoveryDate: Date(),
             connectionStatus: nil
         )
+        
         devices.append(device)
+    }
+    
+    func stopAndReturn() {
+        continuation?.resume(returning: devices)
+        continuation = nil
     }
 }

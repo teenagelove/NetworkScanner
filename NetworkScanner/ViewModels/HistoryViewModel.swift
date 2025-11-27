@@ -9,28 +9,51 @@ import Combine
 import Foundation
 
 @MainActor
-class HistoryViewModel: ObservableObject {
-    
+final class HistoryViewModel: ObservableObject {
+
+    // MARK: - State
+
+    enum State: Equatable {
+        case idle
+        case loading
+        case success([ScanSessionModel])
+        case error(String)
+    }
+
     // MARK: - Published Properties
-    
-    @Published var sessions: [ScanSessionModel] = []
+
+    @Published var state: State = .idle
     @Published var selectedDate: Date = Date()
     @Published var isDateFilterEnabled = false
-    
+
     // MARK: - Public Methods
-    
+
     func fetchSessions() {
+        state = .loading
+
         Task {
-            let dateFilter = isDateFilterEnabled ? selectedDate : nil
-            let fetchedSessions = await CoreDataService.shared.fetchSessions(dateFilter: dateFilter)
-            self.sessions = fetchedSessions
+            do {
+                let dateFilter = isDateFilterEnabled ? selectedDate : nil
+                let sessions = try await CoreDataService.shared.fetchSessions(dateFilter: dateFilter)
+                state = .success(sessions)
+            } catch {
+                state = .error(error.localizedDescription)
+            }
         }
     }
-    
+
     func deleteSession(_ session: ScanSessionModel) {
+        guard case .success(var currentSessions) = state else { return }
+
+        currentSessions.removeAll(where: { $0.id == session.id } )
+
         Task {
-            await CoreDataService.shared.deleteSession(withId: session.id)
-            fetchSessions()
+            do {
+                try await CoreDataService.shared.deleteSession(withId: session.id)
+                state = .success(currentSessions)
+            } catch {
+                state = .error(error.localizedDescription)
+            }
         }
     }
 }

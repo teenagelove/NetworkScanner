@@ -25,8 +25,17 @@ struct DeviceRow: View {
 
 private extension DeviceRow {
     var iconView: some View {
-        Image(systemName: device.type == .bluetooth ? Constants.SFSymbols.bluetoothIcon : Constants.SFSymbols.lanIcon)
-            .foregroundColor(.blue)
+        Image(systemName: device.type == .bluetooth
+              ? Constants.SFSymbols.bluetoothIcon
+              : Constants.SFSymbols.lanIcon)
+            .foregroundColor(iconColor)
+    }
+    
+    var iconColor: Color {
+        if let status = device.connectionStatus {
+            return statusColor(for: status)
+        }
+        return .blue
     }
     
     var deviceInfoView: some View {
@@ -57,11 +66,11 @@ private extension DeviceRow {
         }
     }
     
-    func statusColor(for status: ScannedDevice.BluetoothConnectionStatus) -> Color {
+    func statusColor(for status: BluetoothConnectionStatus) -> Color {
         switch status {
         case .connected:
             return .green
-        case .connecting:
+        case .connecting, .disconnecting:
             return .orange
         case .disconnected:
             return .gray
