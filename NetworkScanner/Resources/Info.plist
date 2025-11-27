@@ -7,15 +7,9 @@
 		<key>UIColorName</key>
 		<string>LaunchscreenColor</string>
 	</dict>
-    <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>We need Bluetooth access to scan for nearby devices</string>
-
-    <key>NSLocalNetworkUsageDescription</key>
-    <string>We need local network access to discover devices on your network</string>
-
-    <key>NSBonjourServices</key>
-    <array>
-        <string>_services._dns-sd._udp</string>
-    </array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app requires Bluetooth access to scan for nearby devices.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app requires local network access to scan for LAN devices.</string>
 </dict>
 </plist>
