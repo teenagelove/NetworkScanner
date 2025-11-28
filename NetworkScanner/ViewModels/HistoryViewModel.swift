@@ -8,33 +8,41 @@
 import Combine
 import Foundation
 
+// MARK: - History View Model
+
 @MainActor
 final class HistoryViewModel: ObservableObject {
 
     // MARK: - State
 
     enum State: Equatable {
-        case idle
-        case loading
         case success([ScanSessionModel])
         case error(String)
     }
 
     // MARK: - Published Properties
 
-    @Published var state: State = .idle
+    @Published var state: State = .success([])
     @Published var selectedDate: Date = Date()
     @Published var isDateFilterEnabled = false
+
+    // MARK: - Private Properties
+
+    private let coreDataService: CoreDataServiceProtocol
+
+    // MARK: - Init
+
+    init(coreDataService: CoreDataServiceProtocol = CoreDataService.shared) {
+        self.coreDataService = coreDataService
+    }
 
     // MARK: - Public Methods
 
     func fetchSessions() {
-        state = .loading
-
         Task {
             do {
                 let dateFilter = isDateFilterEnabled ? selectedDate : nil
-                let sessions = try await CoreDataService.shared.fetchSessions(dateFilter: dateFilter)
+                let sessions = try await coreDataService.fetchSessions(dateFilter: dateFilter)
                 state = .success(sessions)
             } catch {
                 state = .error(error.localizedDescription)
@@ -49,7 +57,7 @@ final class HistoryViewModel: ObservableObject {
 
         Task {
             do {
-                try await CoreDataService.shared.deleteSession(withId: session.id)
+                try await coreDataService.deleteSession(withId: session.id)
                 state = .success(currentSessions)
             } catch {
                 state = .error(error.localizedDescription)
