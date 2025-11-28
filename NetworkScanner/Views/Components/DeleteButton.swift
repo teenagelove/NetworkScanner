@@ -7,8 +7,15 @@
 
 import SwiftUI
 
+// MARK: - Delete Button
+
 struct DeleteButton: View {
+    
+    // MARK: - Properties
+    
     let action: (() -> Void)?
+    
+    // MARK: - Body
 
     var body: some View {
         Button(role: .destructive) {

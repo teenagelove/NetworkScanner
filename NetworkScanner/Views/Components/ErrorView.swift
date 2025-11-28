@@ -18,24 +18,17 @@ struct ErrorView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            image
+            ErrorLottieView()
             errorMessage
             actionButton
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 private extension ErrorView {
 
     // MARK: - View Components
-
-    var image: some View {
-        Image(systemName: Constants.SFSymbols.triangle)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 40, height: 40)
-            .foregroundColor(.orange)
-    }
 
     var errorMessage: some View {
         Text(message)

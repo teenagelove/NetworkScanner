@@ -7,9 +7,16 @@
 
 import SwiftUI
 
-struct ScanningProgressView: View {
-    let value: CGFloat
+// MARK: - Scanning Progress View
 
+struct ScanningProgressView: View {
+    
+    // MARK: - Properties
+    
+    let value: CGFloat
+    
+    // MARK: - Body
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
@@ -21,6 +28,7 @@ struct ScanningProgressView: View {
                     .frame(width: min(CGFloat(value) * geometry.size.width, geometry.size.width))
             }
         }
+        .frame(height: 4)
     }
 }
 
