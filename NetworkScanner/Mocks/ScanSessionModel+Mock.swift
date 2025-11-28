@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Scan Session Model Mocks
+
 extension ScanSessionModel {
     static let mock = ScanSessionModel(
         id: UUID(),

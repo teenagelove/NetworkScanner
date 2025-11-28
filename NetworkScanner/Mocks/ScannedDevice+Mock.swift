@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Scanned Device Mocks
+
 extension ScannedDevice {
     static let mock = mocks[0]
     
