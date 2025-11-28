@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ScanSessionModel: Identifiable, Hashable {
+struct ScanSessionModel: Identifiable, Hashable, Sendable {
     
     // MARK: - Properties
     

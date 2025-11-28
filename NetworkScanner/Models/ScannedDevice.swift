@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Scanned Device
+
 struct ScannedDevice: Identifiable, Hashable {
     
     // MARK: - Properties
@@ -19,9 +21,11 @@ struct ScannedDevice: Identifiable, Hashable {
     let type: DeviceType
     let discoveryDate: Date
     let connectionStatus: BluetoothConnectionStatus?
-    
-    // MARK: - Types
-    
+}
+
+// MARK: - Device Type
+
+extension ScannedDevice {
     enum DeviceType: String {
         case bluetooth = "Bluetooth"
         case lan = "LAN"
