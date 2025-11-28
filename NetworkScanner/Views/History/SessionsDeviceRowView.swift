@@ -1,5 +1,5 @@
 //
-//  DeviceDetailRow.swift
+//  SessionsDeviceRowView.swift
 //  NetworkScanner
 //
 //  Created by Danil Kazakov on 2025/11/27.
@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct DeviceDetailRow: View {
+// MARK: - Device Detail Row
+
+struct SessionsDeviceRowView: View {
     
     // MARK: - Properties
     
@@ -40,6 +42,6 @@ struct DeviceDetailRow: View {
 }
 
 #Preview {
-    DeviceDetailRow(device: .mock)
+    SessionsDeviceRowView(device: .mock)
         .padding()
 }

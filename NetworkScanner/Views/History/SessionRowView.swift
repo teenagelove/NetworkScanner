@@ -1,5 +1,5 @@
 //
-//  SessionRow.swift
+//  SessionRowView.swift
 //  NetworkScanner
 //
 //  Created by Danil Kazakov on 2025/11/27.
@@ -7,8 +7,15 @@
 
 import SwiftUI
 
-struct SessionRow: View {
+// MARK: - Session Row
+
+struct SessionRowView: View {
+    
+    // MARK: - Properties
+    
     let session: ScanSessionModel
+    
+    // MARK: - Body
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -23,6 +30,6 @@ struct SessionRow: View {
 }
 
 #Preview {
-    SessionRow(session: .mock)
+    SessionRowView(session: .mock)
         .padding()
 }
