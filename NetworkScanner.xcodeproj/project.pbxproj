@@ -6,8 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		ACB10EFE2ED997E700D738EB /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = ACB10EFD2ED997E700D738EB /* Lottie */; };
+		ACB10F182ED9CBD000D738EB /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = ACB10F172ED9CBD000D738EB /* Lottie */; };
+		F39BE95DC5CAB68BA24B612B /* Pods_NetworkScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24BF0774368506CAD83DB2F9 /* Pods_NetworkScanner.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		24BF0774368506CAD83DB2F9 /* Pods_NetworkScanner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NetworkScanner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E6A5BC20CEBE49BB4337AB6 /* Pods-NetworkScanner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetworkScanner.release.xcconfig"; path = "Target Support Files/Pods-NetworkScanner/Pods-NetworkScanner.release.xcconfig"; sourceTree = "<group>"; };
 		ACADE7182ED7F30600BEA48B /* NetworkScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetworkScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F36CE4A08C379F7CF825B227 /* Pods-NetworkScanner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetworkScanner.debug.xcconfig"; path = "Target Support Files/Pods-NetworkScanner/Pods-NetworkScanner.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,17 +45,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F39BE95DC5CAB68BA24B612B /* Pods_NetworkScanner.framework in Frameworks */,
+				ACB10EFE2ED997E700D738EB /* Lottie in Frameworks */,
+				ACB10F182ED9CBD000D738EB /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A6EBF8D5CCDC616752C12B9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				24BF0774368506CAD83DB2F9 /* Pods_NetworkScanner.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		86B6C89D460489DEB3208ACF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F36CE4A08C379F7CF825B227 /* Pods-NetworkScanner.debug.xcconfig */,
+				4E6A5BC20CEBE49BB4337AB6 /* Pods-NetworkScanner.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		ACADE70F2ED7F30600BEA48B = {
 			isa = PBXGroup;
 			children = (
 				ACADE71A2ED7F30600BEA48B /* NetworkScanner */,
 				ACADE7192ED7F30600BEA48B /* Products */,
+				86B6C89D460489DEB3208ACF /* Pods */,
+				5A6EBF8D5CCDC616752C12B9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -65,9 +96,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ACADE7232ED7F30700BEA48B /* Build configuration list for PBXNativeTarget "NetworkScanner" */;
 			buildPhases = (
+				4545A513071B5B0C43628BBC /* [CP] Check Pods Manifest.lock */,
 				ACADE7142ED7F30600BEA48B /* Sources */,
 				ACADE7152ED7F30600BEA48B /* Frameworks */,
 				ACADE7162ED7F30600BEA48B /* Resources */,
+				90A9B5E83449719C40C07698 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -77,8 +110,6 @@
 				ACADE71A2ED7F30600BEA48B /* NetworkScanner */,
 			);
 			name = NetworkScanner;
-			packageProductDependencies = (
-			);
 			productName = NetworkScanner;
 			productReference = ACADE7182ED7F30600BEA48B /* NetworkScanner.app */;
 			productType = "com.apple.product-type.application";
@@ -107,6 +138,9 @@
 			);
 			mainGroup = ACADE70F2ED7F30600BEA48B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				ACB10F162ED9CBD000D738EB /* XCRemoteSwiftPackageReference "lottie-spm" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = ACADE7192ED7F30600BEA48B /* Products */;
 			projectDirPath = "";
@@ -126,6 +160,52 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4545A513071B5B0C43628BBC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NetworkScanner-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		90A9B5E83449719C40C07698 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NetworkScanner/Pods-NetworkScanner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NetworkScanner/Pods-NetworkScanner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NetworkScanner/Pods-NetworkScanner-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		ACADE7142ED7F30600BEA48B /* Sources */ = {
@@ -197,6 +277,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -254,6 +335,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -261,6 +343,7 @@
 		};
 		ACADE7242ED7F30700BEA48B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F36CE4A08C379F7CF825B227 /* Pods-NetworkScanner.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -268,6 +351,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7Z457JRAZT;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NetworkScanner/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -298,6 +382,7 @@
 		};
 		ACADE7252ED7F30700BEA48B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4E6A5BC20CEBE49BB4337AB6 /* Pods-NetworkScanner.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -305,6 +390,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7Z457JRAZT;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NetworkScanner/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -355,6 +441,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ACB10EFC2ED997E700D738EB /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.2;
+			};
+		};
+		ACB10F162ED9CBD000D738EB /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		ACB10EFD2ED997E700D738EB /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ACB10EFC2ED997E700D738EB /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+		ACB10F172ED9CBD000D738EB /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ACB10F162ED9CBD000D738EB /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = ACADE7102ED7F30600BEA48B /* Project object */;
 }
