@@ -4,8 +4,12 @@
 <dict>
 	<key>UILaunchScreen</key>
 	<dict>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<true/>
 		<key>UIColorName</key>
 		<string>LaunchscreenColor</string>
+		<key>UIImageName</key>
+		<string>LogoImage</string>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>This app requires Bluetooth access to scan for nearby devices.</string>
