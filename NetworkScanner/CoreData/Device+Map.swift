@@ -8,6 +8,8 @@
 import CoreData
 import Foundation
 
+// MARK: - Device Mapping
+
 extension Device {
     func mapToScannedDevice() -> ScannedDevice {
         return ScannedDevice(
@@ -22,6 +24,8 @@ extension Device {
         )
     }
 }
+
+// MARK: - Device Mapping to Entity
 
 extension ScannedDevice {
     func mapToEntity(context: NSManagedObjectContext, session: ScanSession) -> Device {

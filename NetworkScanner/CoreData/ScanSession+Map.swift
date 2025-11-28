@@ -8,6 +8,8 @@
 import CoreData
 import Foundation
 
+// MARK: - Scan Session Mapping
+
 extension ScanSession {
     func mapToModel() -> ScanSessionModel {
         let deviceEntities = self.devices?.allObjects as? [Device] ?? []
