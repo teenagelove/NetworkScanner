@@ -7,8 +7,15 @@
 
 import SwiftUI
 
+// MARK: - Device Detail View
+
 struct DeviceDetailView: View {
+    
+    // MARK: - Properties
+    
     let device: ScannedDevice
+    
+    // MARK: - Body
     
     var body: some View {
         List {
@@ -16,69 +23,44 @@ struct DeviceDetailView: View {
             
             technicalSection
         }
-        .navigationTitle("Device Details")
+        .navigationTitle(Constants.Titles.deviceDetails)
     }
 }
 
+// MARK: - Private Sections
+
 private extension DeviceDetailView {
     var generalSection: some View {
-        Section(header: Text("General Info")) {
-            DetailRow(label: "Name", value: device.name ?? "Unknown")
-            DetailRow(label: "Type", value: device.type.rawValue)
-            DetailRow(label: "Discovery Date", value: device.discoveryDate.formatted())
+        Section(header: Text(Constants.Titles.generalInfo)) {
+            DetailRowView(label: Constants.Labels.name, value: device.name ?? Constants.Placeholders.unknown)
+            DetailRowView(label: Constants.Labels.type, value: device.type.rawValue)
+            DetailRowView(label: Constants.Labels.discoveryDate, value: device.discoveryDate.formatted())
         }
     }
     
     var technicalSection: some View {
-        Section(header: Text("Technical Details")) {
+        Section(header: Text(Constants.Titles.technicalDetails)) {
             if let ip = device.ipAddress {
-                DetailRow(label: "IP Address", value: ip)
+                DetailRowView(label: Constants.Labels.ipAddress, value: ip)
             }
-            if let mac = device.macAddress {
-                DetailRow(label: "MAC Address", value: mac)
-            }
-            DetailRow(label: "UUID", value: device.id.uuidString)
-            DetailRow(label: "RSSI", value: "\(device.rssi) dBm")
-            
-            if let status = device.connectionStatus {
-                DetailRow(label: "Connection Status", value: status.displayText)
-            }
-        }
-    }
-}
 
-struct DetailRow: View {
-    let label: String
-    let value: String
-    
-    var body: some View {
-        HStack {
-            Text(label)
-                .foregroundColor(.secondary)
-            
-            Spacer()
-            
-            Text(value)
-                .multilineTextAlignment(.trailing)
+            if let mac = device.macAddress {
+                DetailRowView(label: Constants.Labels.macAddress, value: mac)
+            }
+
+            DetailRowView(label: Constants.Labels.uuid, value: device.id.uuidString)
+
+            if device.rssi != 0 {
+                DetailRowView(label: Constants.Labels.rssi, value: "\(device.rssi)" + Constants.Labels.rssiUnit)
+            }
+
+            if let status = device.connectionStatus {
+                DetailRowView(label: Constants.Labels.connectionStatus, value: status.displayText)
+            }
         }
     }
 }
 
 #Preview("DeviceDetailView") {
-    DeviceDetailView(device: ScannedDevice(
-        id: UUID(),
-        name: "Test Device",
-        ipAddress: "192.168.1.1",
-        macAddress: "00:00:00:00:00:00",
-        rssi: -50,
-        type: .bluetooth,
-        discoveryDate: Date(),
-        connectionStatus: .connected
-    ))
+    DeviceDetailView(device: .mock)
 }
-
-#Preview("DetailRow") {
-    DetailRow(label: "Label", value: "Value")
-        .padding()
-}
-

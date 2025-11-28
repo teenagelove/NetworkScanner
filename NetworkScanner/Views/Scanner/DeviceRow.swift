@@ -7,48 +7,53 @@
 
 import SwiftUI
 
+// MARK: - Device Row
+
 struct DeviceRow: View {
+    
+    // MARK: - Properties
+    
     let device: ScannedDevice
     
+    // MARK: - Body
+
     var body: some View {
         HStack {
             iconView
-            
+
             deviceInfoView
-            
+
             Spacer()
-            
+
             rssiView
         }
     }
 }
+
+// MARK: - Private Views
 
 private extension DeviceRow {
     var iconView: some View {
         Image(systemName: device.type == .bluetooth
               ? Constants.SFSymbols.bluetoothIcon
               : Constants.SFSymbols.lanIcon)
-            .foregroundColor(iconColor)
+        .foregroundColor(iconColor)
     }
-    
+
     var iconColor: Color {
         if let status = device.connectionStatus {
             return statusColor(for: status)
         }
         return .blue
     }
-    
+
     var deviceInfoView: some View {
         VStack(alignment: .leading) {
             Text(device.name ?? Constants.Placeholders.unknown)
                 .font(.headline)
-            
+
             if let ip = device.ipAddress {
                 Text(ip)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            } else if let mac = device.macAddress {
-                 Text(mac)
                     .font(.subheadline)
                     .foregroundColor(.gray)
             } else {
@@ -57,7 +62,13 @@ private extension DeviceRow {
                     .foregroundColor(.gray)
                     .lineLimit(1)
             }
-            
+
+            if let mac = device.macAddress {
+                Text(mac)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+
             if let status = device.connectionStatus {
                 Text(status.displayText)
                     .font(.caption)
@@ -65,7 +76,7 @@ private extension DeviceRow {
             }
         }
     }
-    
+
     func statusColor(for status: BluetoothConnectionStatus) -> Color {
         switch status {
         case .connected:
@@ -76,7 +87,7 @@ private extension DeviceRow {
             return .gray
         }
     }
-    
+
     @ViewBuilder
     var rssiView: some View {
         if device.rssi != 0 {

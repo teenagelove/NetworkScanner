@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - Session Detail View
+
 struct SessionDetailView: View {
     
     // MARK: - State
@@ -19,16 +21,20 @@ struct SessionDetailView: View {
         _viewModel = StateObject(wrappedValue: SessionDetailViewModel(session: session))
     }
     
+    init(viewModel: SessionDetailViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     // MARK: - Body
     
     var body: some View {
         Group {
             switch viewModel.state {
-            case .idle, .loading:
-                ProgressView()
             case .success(let devices):
                 List(devices) { device in
-                    DeviceDetailRow(device: device)
+                    NavigationLink(destination: DeviceDetailView(device: device)) {
+                        SessionsDeviceRowView(device: device)
+                    }
                 }
             case .error(let message):
                 ErrorView(message: message) {
@@ -38,11 +44,14 @@ struct SessionDetailView: View {
         }
         .navigationTitle(Constants.Titles.sessionDetails)
         .searchable(text: $viewModel.searchText, prompt: Constants.Placeholders.searchDeviceName)
+        .onAppear {
+            viewModel.fetchDevices()
+        }
     }
 }
 
 #Preview {
     NavigationView {
-        SessionDetailView(session: .mock)
+        SessionDetailView(viewModel: .mock)
     }
 }

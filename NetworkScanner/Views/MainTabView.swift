@@ -7,7 +7,11 @@
 
 import SwiftUI
 
+// MARK: - Main Tab View
+
 struct MainTabView: View {
+    
+    // MARK: - Body
     var body: some View {
         TabView {
             NavigationView {
@@ -30,4 +34,3 @@ struct MainTabView: View {
 #Preview {
     MainTabView()
 }
-

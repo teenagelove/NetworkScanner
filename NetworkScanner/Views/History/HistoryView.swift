@@ -7,19 +7,31 @@
 
 import SwiftUI
 
+// MARK: - History View
+
 struct HistoryView: View {
     
     // MARK: - State
     
-    @StateObject private var viewModel = HistoryViewModel()
+    @StateObject private var viewModel: HistoryViewModel
+    @State private var showDatePicker = false
+    
+    // MARK: - Init
+
+    init() {
+        self.init(viewModel: HistoryViewModel())
+    }
+
+    init(viewModel: HistoryViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     // MARK: - Body
     
     var body: some View {
         Group {
             switch viewModel.state {
-            case .idle, .loading:
-                ProgressView()
+            // Too fast loading, so removed loading state & ProgressView
             case .success(let sessions):
                 sessionsList(sessions)
             case .error(let message):
@@ -30,8 +42,17 @@ struct HistoryView: View {
         }
         .navigationTitle(Constants.Titles.history)
         .toolbar {
-            ToolbarItem(placement: .title) {
+            ToolbarItem(placement: .topBarTrailing) {
                 filterView
+            }
+        }
+        .sheet(isPresented: $showDatePicker) {
+            DatePickerSheet(
+                selectedDate: $viewModel.selectedDate,
+                isPresented: $showDatePicker
+            ) {
+                viewModel.isDateFilterEnabled = true
+                viewModel.fetchSessions()
             }
         }
         .task {
@@ -45,25 +66,57 @@ private extension HistoryView {
     // MARK: - View Components
     
     func sessionsList(_ sessions: [ScanSessionModel]) -> some View {
-        List(sessions) { session in
-            NavigationLink(destination: SessionDetailView(session: session)) {
-                SessionRow(session: session)
-            }
-            .swipeActions(edge: .trailing) {
-                DeleteButton {viewModel.deleteSession( session) }
+        Group {
+            if sessions.isEmpty {
+                emptyStateView
+            } else {
+                ZStack {
+                    List(sessions) { session in
+                        NavigationLink(destination: SessionDetailView(session: session)) {
+                            SessionRowView(session: session)
+                        }
+                        .swipeActions(edge: .trailing) {
+                            DeleteButton { viewModel.deleteSession(session) }
+                        }
+                    }
+                }
             }
         }
     }
     
+    var emptyStateView: some View {
+        VStack(spacing: 16) {
+            EmptyLottieView()
+
+            Text(Constants.Messages.noSessionsFound)
+                .font(.headline)
+                .foregroundColor(.gray)
+            
+            Text(Constants.Messages.startScanningToSeeHistory)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
     var filterView: some View {
         HStack {
-            DatePicker(Constants.Labels.selectDate, selection: $viewModel.selectedDate, displayedComponents: [.date, .hourAndMinute])
-                .datePickerStyle(CompactDatePickerStyle())
-                .labelsHidden()
-                .onChange(of: viewModel.selectedDate) { _ in
-                    viewModel.isDateFilterEnabled = true
-                    viewModel.fetchSessions()
+            Button {
+                showDatePicker = true
+            } label: {
+                HStack {
+                    Image(systemName: Constants.SFSymbols.calendar)
+                    if viewModel.isDateFilterEnabled {
+                        Text(viewModel.selectedDate.formatted(date: .numeric, time: .shortened))
+                            .font(.caption)
+                    }
                 }
+                .padding(8)
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(8)
+            }
             
             if viewModel.isDateFilterEnabled {
                 Button {
@@ -80,7 +133,6 @@ private extension HistoryView {
 
 #Preview("HistoryView") {
     NavigationView {
-        HistoryView()
+        HistoryView(viewModel: .mock)
     }
 }
-

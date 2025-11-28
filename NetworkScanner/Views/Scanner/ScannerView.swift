@@ -7,17 +7,32 @@
 
 import SwiftUI
 
+// MARK: - Scanner View
+
 struct ScannerView: View {
-    
+
     // MARK: - State
-    
-    @StateObject private var viewModel = ScannerViewModel()
-    
+
+    @StateObject private var viewModel: ScannerViewModel
+
+    // MARK: - Init
+
+    init() {
+        self.init(viewModel: ScannerViewModel())
+    }
+
+    init(viewModel: ScannerViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+
     // MARK: - Body
-    
+
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             pickerView
+
+            progressView
+
             contentView
         }
         .navigationTitle(Constants.Titles.networkScanner)
@@ -29,20 +44,15 @@ struct ScannerView: View {
 private extension ScannerView {
     @ViewBuilder
     var contentView: some View {
-        switch viewModel.state {
-        case .idle:
-            emptyDevicesList
-        case .scanning:
-            scanningView
-        case .success(let devices):
-            devicesList(devices: devices)
-        case .error(let message):
-            ErrorView(message: message) {
+        if let errorMessage = viewModel.errorMessage {
+            ErrorView(message: errorMessage) {
                 viewModel.startScanning()
             }
+        } else {
+            devicesList
         }
     }
-    
+
     var pickerView: some View {
         Picker(Constants.Titles.scanType, selection: $viewModel.scanType) {
             ForEach(ScanType.allCases) { type in
@@ -51,31 +61,15 @@ private extension ScannerView {
         }
         .pickerStyle(SegmentedPickerStyle())
         .padding()
-        .disabled(isScanning)
+        .disabled(viewModel.isScanning)
     }
-    
-    var scanningView: some View {
-        VStack {
-            ProgressView()
-                .scaleEffect(2)
-                .padding()
-            
-            Text(Constants.Labels.scanning)
-                .font(.headline)
-            
-            ScanningProgressView(value: viewModel.progress)
-                .frame(height: 8)
-                .padding(.horizontal)
-        }
-        .frame(maxHeight: .infinity)
-    }
-    
-    func devicesList(devices: [ScannedDevice]) -> some View {
+
+    var devicesList: some View {
         ZStack {
-            if devices.isEmpty {
+            if viewModel.scannedDevices.isEmpty && !viewModel.isScanning {
                 emptyStateView
             } else {
-                List(devices) { device in
+                List(viewModel.scannedDevices) { device in
                     NavigationLink(destination: DeviceDetailView(device: device)) {
                         DeviceRow(device: device)
                     }
@@ -85,35 +79,22 @@ private extension ScannerView {
                 }
                 .refreshable { viewModel.startScanning() }
             }
-            
+
             VStack {
                 Spacer()
                 actionButton
             }
         }
     }
-    
-    var emptyDevicesList: some View {
-        ZStack {
-            emptyStateView
-            
-            VStack {
-                Spacer()
-                actionButton
-            }
-        }
-    }
-    
+
     var emptyStateView: some View {
         VStack(spacing: 16) {
-            Image(systemName: Constants.SFSymbols.scannerTab)
-                .font(.system(size: 60))
-                .foregroundColor(.gray)
-            
+            EmptyLottieView()
+
             Text(Constants.Messages.noDevicesFound)
                 .font(.headline)
                 .foregroundColor(.gray)
-            
+
             Text(Constants.Messages.tapToStartScanning)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
@@ -123,46 +104,37 @@ private extension ScannerView {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.bottom, 80)
     }
-    
+
     var actionButton: some View {
-        Button(action: toggleScanning) {
-            Text(isScanning ? Constants.Actions.stopScanning : Constants.Actions.startScanning)
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(isScanning ? Color.red : Color.blue)
-                .cornerRadius(16)
+        Button {
+            viewModel.toggleScanning()
+        } label: {
+            HStack {
+                if viewModel.isScanning {
+                    ScanLottieView()
+                        .frame(height: 20)
+                }
+
+                Text(viewModel.isScanning ? Constants.Actions.stopScanning : Constants.Actions.startScanning)
+                    .font(.headline)
+                    .foregroundColor(.white)
+            }
+            .padding()
+            .background(viewModel.isScanning ? Color.red : Color.blue)
+            .clipShape(RoundedRectangle(cornerRadius: 18))
         }
         .padding()
     }
-}
 
-// MARK: - Computed Properties
-
-private extension ScannerView {
-    var isScanning: Bool {
-        if case .scanning = viewModel.state {
-            return true
-        }
-        return false
-    }
-}
-
-// MARK: - Actions
-
-private extension ScannerView {
-    func toggleScanning() {
-        if isScanning {
-            viewModel.stopScanning()
-        } else {
-            viewModel.startScanning()
-        }
+    var progressView: some View {
+        ScanningProgressView(value: viewModel.progress)
+            .opacity(viewModel.isScanning ? 1 : 0)
+            .id(viewModel.animationID)
     }
 }
 
 // MARK: - Preview
 
 #Preview {
-    ScannerView()
+    ScannerView(viewModel: .mock)
 }
