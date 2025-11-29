@@ -16,6 +16,10 @@
 
 A powerful network scanning utility for iOS, built with **SwiftUI** and **MVVM** architecture. The application provides comprehensive tools for discovering devices on your Local Area Network (LAN) using **MMLanScan** and detecting nearby Bluetooth peripherals with **CoreBluetooth**. It features a modern interface with **Lottie** animations and robust data persistence using **CoreData**.
 
+## ⚠️ Important
+
+**MAC addresses and device brands are not available on iOS 11+** due to Apple's privacy restrictions. This is a system-level limitation affecting all network scanning applications.
+
 ## ✨ Features
 
 - **📡 LAN Scanner:** Quickly detect all devices connected to your Wi-Fi network using the robust **MMLanScan** library.
