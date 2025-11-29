@@ -44,6 +44,7 @@ struct HistoryView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 filterView
+                    .tint(viewModel.isDateFilterEnabled ? .blue : .gray)
             }
         }
         .sheet(isPresented: $showDatePicker) {
