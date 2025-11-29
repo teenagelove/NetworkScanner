@@ -1,5 +1,5 @@
 //
-//  DeviceRow.swift
+//  DeviceRowView.swift
 //  NetworkScanner
 //
 //  Created by Danil Kazakov on 2025/11/27.
@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - Device Row
 
-struct DeviceRow: View {
+struct DeviceRowView: View {
     
     // MARK: - Properties
     
@@ -30,9 +30,10 @@ struct DeviceRow: View {
     }
 }
 
-// MARK: - Private Views
+private extension DeviceRowView {
 
-private extension DeviceRow {
+    // MARK: - View Components
+
     var iconView: some View {
         Image(systemName: device.type == .bluetooth
               ? Constants.SFSymbols.bluetoothIcon
@@ -99,6 +100,6 @@ private extension DeviceRow {
 }
 
 #Preview {
-    DeviceRow(device: .mock)
+    DeviceRowView(device: .mock)
         .padding()
 }

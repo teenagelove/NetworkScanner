@@ -39,9 +39,10 @@ struct ScannerView: View {
     }
 }
 
-// MARK: - Private Views
-
 private extension ScannerView {
+
+    // MARK: - View Components
+
     @ViewBuilder
     var contentView: some View {
         if let errorMessage = viewModel.errorMessage {
@@ -71,7 +72,7 @@ private extension ScannerView {
             } else {
                 List(viewModel.scannedDevices) { device in
                     NavigationLink(destination: DeviceDetailView(device: device)) {
-                        DeviceRow(device: device)
+                        DeviceRowView(device: device)
                     }
                 }
                 .safeAreaInset(edge: .bottom) {

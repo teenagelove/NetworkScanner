@@ -27,9 +27,10 @@ struct DeviceDetailView: View {
     }
 }
 
-// MARK: - Private Sections
-
 private extension DeviceDetailView {
+
+    // MARK: - View Components
+
     var generalSection: some View {
         Section(header: Text(Constants.Titles.generalInfo)) {
             DetailRowView(label: Constants.Labels.name, value: device.name ?? Constants.Placeholders.unknown)
