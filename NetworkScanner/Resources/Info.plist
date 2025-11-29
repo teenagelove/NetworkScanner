@@ -4,10 +4,16 @@
 <dict>
 	<key>UILaunchScreen</key>
 	<dict>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<true/>
+		<key>UIColorName</key>
+		<string>LaunchscreenColor</string>
 		<key>UIImageName</key>
-		<string></string>
-		<key>UILaunchScreen</key>
-		<dict/>
+		<string>LogoImage</string>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app requires Bluetooth access to scan for nearby devices.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app requires local network access to scan for LAN devices.</string>
 </dict>
 </plist>
